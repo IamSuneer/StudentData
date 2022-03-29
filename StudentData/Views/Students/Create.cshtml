@@ -1,0 +1,85 @@
+﻿@model StudentData.Models.Student
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Student</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <h6><label asp-for="FirstName" class="control-label"></label></h6>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <h6><label asp-for="LastName" class="control-label"></label></h6>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <h6><label asp-for="UploadFile" class="control-label"></label></h6>
+                <input asp-for="UploadFile" accept="image/*" />
+                <span asp-validation-for="UploadFile" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <h6><label asp-for="DateOfBirth" class="control-label"></label></h6>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <h6><label asp-for="Level" class="control-label"></label></h6>
+                <select asp-for="Level" class="form-control" asp-items="Html.GetEnumSelectList<Level>()">
+                    <option value=""> -- Select Level -- </option>
+                </select>
+                <span asp-validation-for="Level" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <h6><label asp-for="Gender" class="control-label"></label></h6>
+                @foreach (var g in Enum.GetValues(typeof(Gender)))
+                {
+                    <label asp-for="Gender" class="list-group-item-action form-check">
+                        <input type="radio" asp-for="Gender" value="@((int)g)" />@g
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </label>
+                }
+            </div>
+            <br />
+            <div class="form-group">
+                <h6><label asp-for="Hobby" class="control-label"></label></h6>
+                @foreach (var h in Enum.GetValues(typeof(Hobby)))
+                {
+                    <label asp-for="Hobby" class="list-group-item-action form-check">
+                        <input type="radio" asp-for="Hobby" value="@((int)h)" />
+                        <span asp-validation-for="Hobby" class="text-danger"></span>
+                        @h
+                    </label>
+                }
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

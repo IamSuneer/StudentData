@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Ajax Test";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div class="container mt-3">
+  <h2>Name form</h2>
+
+    <div class="mb-3 mt-3">
+      <label for="Name">Name:</label>
+      <input type="text" class="form-control" id="Name" placeholder="Enter Name" name="Name">
+    </div>
+    <div class="mb-3">
+      <label for="Age">Age:</label>
+      <input  class="form-control" id="Age" placeholder="Enter Age" name="Age" maxlength="2" autocomplete="off" onkeypress="return (event.charCode !=8 &amp;&amp; event.charCode ==0 || (event.charCode >= 48 &amp;&amp; event.charCode <= 57))" type="text">
+    </div>
+   
+    <input type="button" onclick="Save()" class="btn btn-primary" value="Submit"/>
+
+</div>
+<div class="container mt-3">
+  <h2>Listed Data</h2>       
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tbodylist">    
+    </tbody>
+  </table>
+</div>
+
+
+@section scripts{
+<script type="text/javascript">
+    $( document ).ready(function() {
+   loadData();
+});
+function loadData(){
+  $.ajax({
+        'url' : '/Home/List',
+        'type' : 'POST',
+        //'data' : Data,
+        'success' : function(result) {     
+            console.log(result);
+           var resulthtml="";
+            if(result!="" && result!=null &&result!=undefined && result.length>0){
+                var data=result;
+                for(i=0;i<data.length;i++){
+                      var html=  "";
+                       html=   "<tr>";
+                       html=  html+ "<td>"+data[i].name+"</td>";
+                       html=  html+      "<td>"+data[i].age+"</td>";
+                       html=  html+      "<td><button type='button' class='btn btn-info'>Edit</button> <button type='button' class='btn btn-danger'>Delete</button></td>";
+                       html=  html+       "</tr>";
+                       resulthtml=resulthtml+html;
+                }             
+
+            }
+            $("#tbodylist").html(resulthtml);
+        
+        },
+        'error' : function(request,error)
+        {
+           
+        }
+    });
+}
+function Save(){
+debugger;
+    var Name=$("#Name").val();
+    var Age=$("#Age").val();
+    var Data={
+        Name:Name,
+        Age:Age
+    }
+    console.log(Data);
+    $.ajax({
+        'url' : '/Home/Save',
+        'type' : 'POST',
+        'data' : Data,
+        'success' : function(result) {     
+            console.log(result);
+           alert('Data: '+result);
+             loadData();
+        },
+        'error' : function(request,error)
+        {
+            alert();
+        }
+    });
+    //$.ajax({
+    //    type: 'POST',
+    //    url: '/Home/Save',
+    //    data: Data,
+    //    success: function (result) {
+    //            alert('Successfully received Data ');
+    //          //  console.log(result);
+    //        },
+    //    error: function () {
+    //            alert('Failed to receive the Data');
+    //          //  console.log('Failed ');
+    //})
+}
+</script>
+
+}
+
